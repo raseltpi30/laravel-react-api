@@ -29,7 +29,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User registered successfully.',
-            'access_token' => $token,
+            'user_access_token' => $token,
             'token_type' => 'Bearer',
         ]);
     }
@@ -42,6 +42,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid login credentials.'], 401);
         }
@@ -51,7 +52,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Login successful. Redirect to login  page',
-            'access_token' => $token,
+            'user_access_token' => $token,
             'token_type' => 'Bearer',
         ]);
     }

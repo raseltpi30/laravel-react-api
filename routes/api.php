@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AdminController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,7 @@ use App\Http\Controllers\ProductController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->get('/admin', [AdminController::class, 'getAdminDetails']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -31,4 +34,9 @@ Route::post('/products', [ProductController::class, 'store']);     // Create a n
 Route::get('/products/{id}', [ProductController::class, 'show']);  // Fetch a single product
 Route::put('/products/{id}', [ProductController::class, 'update']); // Update a product
 Route::delete('/products/{id}', [ProductController::class, 'destroy']); // Delete a product
+
+
+
+Route::post('/admin/register', [AdminController::class, 'register']);
+Route::post('/admin/login', [AdminController::class, 'login']);
 
