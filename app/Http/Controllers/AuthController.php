@@ -22,6 +22,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user',
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -31,6 +32,7 @@ class AuthController extends Controller
             'message' => 'User registered successfully.',
             'user_access_token' => $token,
             'token_type' => 'Bearer',
+            'role' => 'user',
         ]);
     }
 
@@ -54,6 +56,7 @@ class AuthController extends Controller
             'message' => 'Login successful. Redirect to login  page',
             'user_access_token' => $token,
             'token_type' => 'Bearer',
+            'role' => 'user',
         ]);
     }
 
@@ -61,7 +64,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-
         return response()->json(['message' => 'Logged out successfully.']);
     }
 }

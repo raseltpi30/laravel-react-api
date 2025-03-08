@@ -15,11 +15,36 @@ class ProductController extends Controller
                 'name' => $product->name,
                 'category' => $product->category,
                 'price' => $product->price,
+                'quantity' => $product->quantity,
                 'sale_percentage' => $product->sale_percentage,
                 'img' => asset('uploads/products/' . $product->img), // Ensure full URL
             ];
         });
     }
+    public function indexFront(Request $request)
+    {
+        $category = $request->query('category'); // Get category from query string
+
+        $productsQuery = Product::query();
+
+        if ($category) {
+            // Filter by category if provided
+            $productsQuery->where('category', $category);
+        }
+
+        return $productsQuery->get()->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'category' => $product->category,
+                'price' => $product->price,
+                'quantity' => $product->quantity,
+                'sale_percentage' => $product->sale_percentage,
+                'img' => asset('uploads/products/' . $product->img), // Ensure full URL
+            ];
+        });
+    }
+
 
 
     public function store(Request $request)
@@ -46,6 +71,7 @@ class ProductController extends Controller
             'category' => $request->category,
             'img' => $imageName, // Save image name in database
             'price' => $request->price,
+            'quantity' => $request->quantity,
             'sale_percentage' => $request->sale_percentage,
         ]);
 
@@ -56,7 +82,11 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        return Product::findOrFail($id);
+        $product = Product::findOrFail($id);
+        if (!$product) {
+            return response()->json(['success' => 'Product not found'], 404);
+        }
+        return response()->json($product, 201);
     }
 
     public function update(Request $request, $id)

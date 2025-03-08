@@ -10,8 +10,10 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('admin')->check()) {
-            return response()->json(['message' => 'Unauthorized admin access'], 403);
+        $user = Auth::user();
+        // ✅ Check if user is authenticated and has the admin role
+        if (!$user || $user->role !== 'admin') {
+            return response()->json(['error' => 'Unauthorized access'], 403);
         }
 
         return $next($request);

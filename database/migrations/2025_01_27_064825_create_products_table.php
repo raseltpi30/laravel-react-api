@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('category');
             $table->string('img');
             $table->decimal('price', 8, 2);
+            $table->integer('quantity')->default(100);
             $table->integer('sale_percentage')->default(0);
             $table->timestamps();
         });
